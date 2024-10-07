@@ -66,6 +66,19 @@
             margin: 10px 0;
             font-size: 18px;
         }
+
+        #orderSummary {
+            margin-top: 20px;
+            display: none;
+            padding: 15px;
+            background-color: #e0ffe0;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        #orderSummary p {
+            font-size: 16px;
+        }
     </style>
 </head>
 <body>
@@ -98,6 +111,12 @@
 
             <button type="submit">Place Order</button>
         </form>
+
+        <div id="orderSummary">
+            <p><strong>Order Summary:</strong></p>
+            <p id="summaryDetails"></p>
+            <p><strong>Thank you for your order!</strong></p>
+        </div>
     </div>
 
     <script>
@@ -117,13 +136,37 @@
         }
 
         function validateForm(event) {
+            event.preventDefault(); // Prevent the form from submitting
+
             const mobileInput = document.getElementById('mobile').value;
             const mobilePattern = /^[0-9]{10}$/;
 
             if (!mobilePattern.test(mobileInput)) {
                 alert('Please enter a valid 10-digit mobile number.');
-                event.preventDefault();
+                return;
             }
+
+            // Display order summary if everything is valid
+            displayOrderSummary();
+        }
+
+        function displayOrderSummary() {
+            const tshirtType = document.getElementById('tshirtType').options[document.getElementById('tshirtType').selectedIndex].text;
+            const size = document.getElementById('size').value;
+            const quantity = document.getElementById('quantity').value;
+            const mobile = document.getElementById('mobile').value;
+            const totalPrice = document.getElementById('totalPrice').innerText;
+
+            const summaryText = `
+                T-Shirt Type: ${tshirtType}<br>
+                Size: ${size}<br>
+                Quantity: ${quantity}<br>
+                Mobile Number: ${mobile}<br>
+                Total Price: ₹${totalPrice}
+            `;
+
+            document.getElementById('summaryDetails').innerHTML = summaryText;
+            document.getElementById('orderSummary').style.display = 'block'; // Show the summary
         }
     </script>
 </body>
